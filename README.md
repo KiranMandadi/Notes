@@ -1,51 +1,26 @@
-Report changes (Quality report and Executive brief). Same ground rules as before:
-enterprise profile is the target, no branches, tags or commits, never paste the Console
-URL with its ?t= token, report in codes and counts only.
+Report polish (Quality report and Executive brief). Same ground rules: enterprise profile
+is the target, no branches, tags or commits, never paste the Console URL with its ?t=
+token, codes and counts only.
 
-1. Headline names what to add, not where it was found.
-   The decision line (brief: "Two fixes needed before approval: ...", report:
-   "Fix the ...") must name the missing items from the findings, e.g. "name the LPAR or
-   region, and the batch jobs, scheduler and cycle" - never field names like "the
-   summary and the notes". Keep it to one sentence; if more than 3 findings, name the top
-   2 and add "and N more".
-
-2. History counts must agree.
-   The report ("Compared with N past changes") and the brief ("Based on N completed
-   changes ... X went fine and Y led to an incident") must use the same sample and the
-   same N. "Went fine" excludes changes that led to an incident, so X + Y <= N. Find why
-   the report shows 93 and the brief 97, fix it at the source, and add a test that both
-   screens use the same numbers and the outcome counts add up.
-
-3. Human-readable durations everywhere.
-   Show durations as "27 h 55 min", "1 h 33 min" or "45 min" (no decimals like
-   27.9167 or 1.555) in the header, the history tables on both tabs, At a glance and the
-   brief. One shared formatter, with tests.
-
-4. Rule messages must not expose keyword lists.
-   Messages like "...the cycle: one of ca-7, control-m, tws, zeke." must not print the
-   rule's internal word list. The message states what is missing ("names the scheduler");
-   examples belong in the fix text, properly written (CA-7, Control-M, TWS). Check every
-   rule pack for messages that interpolate keyword lists and fix them; keep
-   `crq rules validate` and the rule examples passing.
-
-5. Remove "Check again" completely.
-   Remove the button from both tabs, the "Since last check" strip and line, since.py,
-   its tests and docs. The user gets fresh data by searching the CRQ again. Release as
-   0.10.2 with a CHANGELOG line "Removed Check again".
-
-6. Header: three labelled fields; the rest moves.
-   - Header keeps: CRQ number, summary, quality score ring and status, and one row of
-     three labelled fields: "Requested by", "Planned" (start -> end with duration in the
-     new format) and "Service".
-   - Move Class, Support group and Remedy status into "At a glance" on the Quality
-     report. On the Executive brief, add a compact labelled row with the same fields under
-     the decision card.
-   - "Requested by" is the person who raised the CRQ. Add it to the report contract and
-     the enterprise field map; if the exact Remedy field (customer name vs submitter) is
-     not confirmed in the repo, add a TODO and list it - do not guess. It is read live and
-     shown on screen and in saved reports only: never written to the history database or
-     to any log.
-
-7. Update tests (unit, UI, browser and print checks) and docs. Run pytest, ruff and the
-   browser checks; report counts per profile; list files changed and any new enterprise
-   TODOs; remind me nothing is committed. Then stop.
+1. Header layout:
+   - Line 1: CRQ number small (about 15 px, monospace, muted teal) with a small copy
+     button (copies the CRQ number only; shows "Copied").
+   - Line 2: the change summary as the page title: 22 px, semibold, white, at most 2
+     lines, ellipsis if longer, full summary in a tooltip (title attribute, plain text,
+     escaped). The full summary stays in Description and notes.
+   - Line 3: the three labelled fields as now (Requested by, Planned, Service).
+   - Remove the "60 of 100" text next to the ring; keep the ring, "Quality score"
+     label and the status pill. Same header on both tabs.
+2. Evidence for missing items: when a finding is about something missing, show
+   "Not found in <fields checked> (<N> characters checked)" instead of quoting the start of
+   a field. Quote text only when the rule matched specific wording (for example a vague
+   phrase). Apply to the report, the brief and Send to owner; add tests.
+3. Points lost: show the points on each issue row in "Issues to fix" (e.g. "-20" next to
+   the severity), add one line under the issues list "Score: 100 - 40 = 60", and remove
+   the separate Points lost card. Move "At a glance" up into that space. Keep the brief
+   consistent.
+4. History table: align all column headers (What, This change, Usually, Note) on one
+   baseline.
+5. Check at 1440 px and about 760 px wide and in print. Update tests and docs/ui.md. Run
+   pytest, ruff and the browser and print checks; report counts per profile; list files
+   changed; remind me nothing is committed. Then stop.
