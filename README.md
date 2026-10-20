@@ -1,30 +1,48 @@
-Decisions for docs/PLAN-remove-sample.md:
-- Q1: Option A. You cannot read cr_core/config.py, so do not touch it. I will make the
-  edit myself after you finish. Required behaviour: default profile is "enterprise";
-  REMEDY_BACKEND defaults to "api" and only "api" is accepted (anything else, including
-  "mock", raises a clear error). Write tests for this behaviour; they may fail until I
-  make the edit - list them as "waiting on config.py".
-  Tests must never set REMEDY_BACKEND=mock; they create the mock Remedy client directly
-  (fixture or injection).
-- Q2: Yes, remove `crq history build-sample`.
-- Q3: Yes, crq-load runs on api only; loader tests use the injected mock client.
-- Q4: Yes, change copilot-instructions.md and CONTRIBUTING.md to "keep the minimal
-  suite's categories covered".
-- Q5: Yes, leave profiles/enterprise/config/history.yaml unchanged; list the outdated
-  comment in your report so I can fix it by hand.
-- Q6: Yes, leave work/ and reports/ alone; report repo size with and without them.
-- Q7: Yes, leave docs/archive/, docs/design/ and past CHANGELOG entries unchanged.
+Project-wide cleanup of unused or obsolete files, folders and code. Functionality must not
+change. Same ground rules as before: no branches, tags or commits; never paste the Console
+URL with its ?t= token; codes and counts only; no new dependencies.
 
-Now do Phase 1 as written in docs/PLAN-remove-sample.md. Same ground rules: no branches,
-tags or commits; never paste the Console URL with its ?t= token; codes and counts only;
-profiles/enterprise/ byte-for-byte unchanged.
+PROTECTED - never delete, move or edit:
+- profiles/enterprise/ (byte-for-byte; record a SHA-256 manifest before and after).
+- cr_core/config.py and any file blocked by content exclusion.
+- Every TODO, FIXME, <CONFIRM>, <NOT_AVAILABLE> marker and the files that hold them; all
+  open action items in docs/roadmap.md, PLAN-*.md files and CHANGELOG.
+- docs/design/console-v2/ (mock-ups, build prompts, plans), docs/archive/, past CHANGELOG
+  entries.
+- .github/agents and Copilot instruction files (wording updates only if they reference
+  something removed).
+- Git-ignored user data: work/, reports/, logs/, history databases, .env, drafts.
+- The "waiting on config.py" tests.
 
-In your final report include:
-1. The enterprise SHA-256 manifest comparison (before vs after, must match exactly).
-2. Before/after: repo size, test count, pytest time, browser/print check time, files
-   deleted and changed.
-3. Test results, with any "waiting on config.py" tests listed separately.
-4. Exact instructions for my config.py edit: what to search for, and what the default
-   profile and backend lines must become (describe the behaviour and the expected
-   values; you cannot see the file).
-5. A reminder that nothing is committed. Then stop.
+Phase 0 - scan and report only, no changes; write docs/PLAN-cleanup.md:
+1. Baseline: repo size (with/without work/ and reports/), file count, test count, pytest
+   time; save `crq --help` and every subcommand's --help output; save the report JSON
+   and draft JSON produced from the test fixtures; save the list of Console routes.
+2. Find candidates, each with evidence:
+   - Python modules, functions, classes and constants never imported or called (check
+     imports, CLI entry points in pyproject.toml, Console routes, templates, tests,
+     agent files and docs);
+   - unused imports and variables (ruff F401, F841 and similar);
+   - static assets (CSS, JS, fonts, images) and templates never referenced;
+   - test helpers and fixtures no test uses;
+   - docs that describe removed features (not archive/design) or duplicate another doc;
+   - leftover files: caches, __pycache__, build or egg-info folders, stray scratch files,
+     empty folders, old lock files;
+   - dependencies in pyproject.toml / lock files no code imports;
+   - dead config keys and settings nothing reads (outside protected files).
+3. Classify every candidate: SAFE (provably unused), CHECK (likely unused but
+   referenced dynamically, by name in YAML, by agents or by docs), KEEP (protected or
+   used). Give the evidence for each.
+4. Expected after numbers. Then stop and wait for my OK.
+
+Phase 1 - after my OK: remove only the items I approve (default: SAFE only).
+Verify:
+- enterprise SHA-256 manifest unchanged;
+- ruff, crq rules validate, pytest, browser and print checks pass (the "waiting on
+  config.py" tests may still fail as before - list them separately);
+- every --help output, the report JSON and draft JSON from the fixtures, and the Console
+  route list are identical to the baseline (show the diff result);
+- `crq ui` starts with the enterprise profile.
+Update CHANGELOG ("Housekeeping: removed unused files and code"), version 0.10.4.
+Report before/after numbers, every file deleted or changed, and remind me nothing is
+committed. Then stop.
