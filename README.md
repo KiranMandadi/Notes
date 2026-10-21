@@ -1,38 +1,23 @@
-Final enterprise-grade pass. Same ground rules: no branches, tags or commits; never paste the
-Console URL with its ?t= token; codes and counts only; no new dependencies without asking;
-functionality unchanged; nothing deleted.
+Decisions:
+- Q1: repoint all 18 references to docs/setup-enterprise.md, then move
+  loader/OFFICE_SETUP.md into docs/archive/ (listed in INDEX.md). No "office" path left in
+  the active project.
+- Q2: yes, reword archived records and past CHANGELOG entries to neutral wording, keeping
+  the meaning. Yes, exclude this plan from the final search and archive it at the end.
+- Q3: write "as company policy requires" for retention of reports, drafts and logs, and
+  add "Retention periods" to docs/open-items.md under Decisions pending. Replace "a report
+  can be emailed" with: reports contain change text and a person's name and may only be
+  shared through approved company channels.
+- Q4: yes, add THIRD-PARTY-NOTICES.md (mark the 10 unverified platform packages as
+  "Unverified - check on Windows/Linux").
+- Q5: yes - list the exact LICENSE line for me to edit by hand; do not edit it.
+- Q6: keep OFL.txt byte for byte; mark it -text in .gitattributes.
+- Q7: leave the git history unchanged; add a note to docs/open-items.md (Decisions pending):
+  "Commit author identity - confirm work identity; history rewrite only by team agreement
+  before others clone".
+- Q8: yes, make CI manual-only, gated by CHANGELENS_CI_ENABLED, runner labels from
+  variables.
 
-PROTECTED: profiles/enterprise/ (byte-for-byte, SHA-256 before/after; list any wording
-there for me to edit by hand), cr_core/config.py and content-excluded files, every
-TODO/FIXME/<CONFIRM>/<NOT_AVAILABLE> marker, .github/agents/*.md behaviour (paths and
-wording only).
-
-Phase 0 - scan and report only; write docs/PLAN-enterprise-pass.md:
-1. Wording sweep across ALL text files, including docs/archive/ and
-   docs/design/console-v2/, code comments, messages and --help text. Search
-   case-insensitively for: office, office laptop, office repo, office setup, laptop, local
-   laptop, personal, personal repo, personal Mac, my Mac, my machine, home machine, at home,
-   /Users/, C:\Users\, any person's name or username, any personal GitHub account. List
-   every hit with file, line and proposed neutral wording ("the enterprise profile",
-   "your computer", "the repository"). Team names such as "Change management office" stay.
-2. Machine-specific details: absolute paths, hostnames, fixed ports assumed in docs,
-   macOS-only commands without a Windows equivalent.
-3. Licences: project LICENSE, third-party licences (fonts, Python packages), whether a
-   NOTICE / third-party list is needed.
-4. Dependencies: pyproject.toml vs lock file consistency, unused packages, Python version
-   stated consistently (3.11+). Do not install scanners; say what to run with an approved
-   tool.
-5. CI: propose a workflow file that runs scripts/check.py, disabled or clearly marked
-   until company runners are available.
-6. Data handling: whether docs say where history databases, logs, drafts and saved
-   reports live, retention, how to delete them, and that they are never committed or shared.
-7. Repo hygiene: .editorconfig, .gitattributes, and .gitignore coverage of .env, *.db,
-   logs/, work/, reports/, caches.
-Give a batch order, then stop and wait for my OK.
-
-Later phases: one batch per phase, stop after each. Verify after each: enterprise SHA-256
-unchanged; markers unchanged; python scripts/check.py and the browser and print checks
-pass; --help outputs, report JSON, draft JSON and Console routes identical to a baseline
-(intended wording changes listed); a final search for the Phase 0 terms returns zero hits
-outside protected files. At the end: CHANGELOG line "Enterprise housekeeping", version
-0.10.7. Remind me nothing is committed.
+Now do batch 1 (repository hygiene) only, verify as agreed, and stop. Same ground rules:
+no branches, tags or commits; profiles/enterprise/ and cr_core/config.py untouched; nothing
+deleted.
