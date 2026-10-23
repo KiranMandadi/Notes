@@ -1,18 +1,19 @@
-Restyle the verdict ribbon at the top of the Quality report (and the matching decision card
-on the Executive brief) to be cleaner. Same ground rules: no branches, tags or commits; never
-paste the Console URL with its ?t= token; enterprise profile and config.py untouched.
-
-1. Background white like the other cards (no light-red fill), 1px border as other cards, plus a
-   4px left accent bar in the status colour (Blocked red, Needs work amber, Ready green).
-2. Status label as a pill using the same colours as the header status pill, e.g.
-   "BLOCKED · Fix before review". Warning icon in the status colour on white (no pink square).
-3. Headline in the normal ink colour, max 2 lines; summary line muted, unchanged text.
-4. Blockers / Major / Minor counts use the SAME colours as the severity pills in Issues to fix
-   (use the shared tokens, not new colours): number and label in the pill's text colour on the
-   pill's background tint, as compact tiles. A count of 0 is neutral grey with no tint.
-5. Risk and Freeze stay neutral (ink text, muted label); use colour only when they need
-   attention (Freeze clash = red, Risk High = amber).
-6. Thin dividers between tiles; keep it on one row at 1440 px and stack cleanly at ~760 px;
-   print in colour-safe form (accent bar and tints may drop, text must stay readable).
-7. Update the browser/print checks and docs/user-guide.md if they describe the ribbon. Run
-   python scripts/check.py and the browser checks; list files changed; then stop.
+Build it with these adjustments:
+1. Q-VAGUE-01 on impact answers: do not fully exempt. Raise at most ONE finding per change, at
+   Minor, e.g. "Impact answers say 'no impact' without a reason (N of M answers)"; skip it if any
+   answer or the notes gives a reason. "No impact" outside the template answers keeps today's rule.
+2. Completeness rules (summary words, details chars, backout chars) measure only the human answers,
+   with template question text stripped. Add one Minor "Template questions left unanswered", listing
+   which questions have no answer.
+3. When the only evidence for a platform is words in the text (after stripping questions), do not
+   run that platform pack; raise CL-02 once naming the suggested platform. Show me the measured
+   impact of this change separately before keeping it.
+4. Put the question list in a NEW file profiles/enterprise/config/template_questions.yaml (both
+   template variants). This is the only allowed change in profiles/enterprise/; list it in the diff.
+   Match case-, spacing- and numbering-insensitively.
+5. Keep "as" as a reason word and ignore links when looking for vague words.
+Validation: before/after on the 20 pending and 6,376 past changes per rule (codes and counts only);
+list 15-20 findings that disappear (CRQ id + rule id only) for me to spot-check; golden tests for
+template-only details, a real "batch job" mention outside the questions, and a bare "No impact";
+bump the affected rule pack versions; history never changes the score. Run scripts/check.py, then stop.
+No branches, tags or commits.
