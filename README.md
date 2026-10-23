@@ -1,13 +1,9 @@
 Decisions:
-- Item 3: keep (no packs on word-only platform guesses; CL-02 names the guess).
-- CC-06 / MF-05: do NOT let them read template text. Instead create ONE shared, configurable reason
-  vocabulary used by every reason-checking rule (Q-VAGUE-01, Q-VAGUE-03, CC-06, MF-05 and any other
-  rule with reason words): because, since, as, due to, so that, to avoid, approved, outside market
-  hours/market closure, plus each rule's existing words. Keep it in the rule settings, versioned.
-- Re-run the measurement with the requester treated as present (a placeholder, never a real name)
-  so Q-COMPLETE-01 does not fire on every change; show the true pending and past status split and
-  the per-rule table again, including CC-06 and MF-05 after the shared vocabulary.
-- profiles/enterprise/ changed in core.yaml and classification.yaml as well as the new
-  template_questions.yaml: show me those two diffs in full, and record a new enterprise SHA-256
-  baseline after my approval.
+- CC-06 / MF-05: keep the window-sentence rule. Add to window_words: downtime, outage,
+  maintenance, nightly, overnight run, weekday names (Monday-Sunday), weekend, cutover. Bump
+  quality_rules.yaml, measure again (pending/past per rule and status split), and list 10 changes
+  (CRQ id + rule id only) that are still flagged by CC-06 and 10 by MF-05 for me to spot-check.
+- The diffs for core.yaml, classification.yaml, change-class.yaml, mainframe.yaml,
+  quality_rules.yaml and the new template_questions.yaml are approved. After the measurement,
+  record the new enterprise SHA-256 baseline.
 Run scripts/check.py; codes and counts only; no branches, tags or commits; then stop.
