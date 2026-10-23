@@ -1,9 +1,7 @@
-Decisions:
-- CC-06 / MF-05: keep the window-sentence rule. Add to window_words: downtime, outage,
-  maintenance, nightly, overnight run, weekday names (Monday-Sunday), weekend, cutover. Bump
-  quality_rules.yaml, measure again (pending/past per rule and status split), and list 10 changes
-  (CRQ id + rule id only) that are still flagged by CC-06 and 10 by MF-05 for me to spot-check.
-- The diffs for core.yaml, classification.yaml, change-class.yaml, mainframe.yaml,
-  quality_rules.yaml and the new template_questions.yaml are approved. After the measurement,
-  record the new enterprise SHA-256 baseline.
-Run scripts/check.py; codes and counts only; no branches, tags or commits; then stop.
+1. Confirm where enterprise.sha256 is in the repo (path); if it is only in the session folder,
+   save it as tests/baselines/enterprise.sha256 (or similar) and make the check script compare
+   against it.
+2. Show me the diffs for support_groups.yaml (new), history.yaml, history_map.yaml and
+   remedy_field_map.yaml against the 21 Oct baseline, with a one-line note on which approved
+   change each came from.
+No branches, tags or commits; then stop.
