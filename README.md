@@ -1,23 +1,14 @@
-Rules framework redesign - Phase 0, design only; write docs/plans/rules-framework.md and stop.
-No code, profile, branch, tag or commit changes. Codes and counts only.
-Goals: rules human-readable, editable and maintainable by tech and non-tech owners, ready to be
-externalized later; support custom global rules, service-local rules, and suppressions.
-Propose:
-1. Rule file format: plain-language fields first (id, title, why, severity, status
-   draft|shadow|active|retired, owner, source link, message, fix, question), then a `check` block
-   using only the existing check types; word/phrase lists instead of regex (regex only in an
-   "advanced" field); examples required. A JSON Schema for the files, validated by crq rules validate.
-2. Folder layout under profiles/enterprise/config/rules/: global/, platforms/, services/<service>.yaml,
-   custom/; loader reads from a configurable path (CHANGELENS_RULES_DIR) so rules can move out later.
-3. Service files: add_rules, suppress (rule, reason, approved_by, expires - required), parameters
-   (bounded overrides). Locked rules that cannot be suppressed (propose the list). Precedence:
-   global -> platform -> service; locked always wins; expired suppressions stop applying.
-4. Reports: "N rules suppressed for this service" (names with Technical details on), Send to owner too.
-5. Shadow status: rule runs, shows as advisory with 0 points, and is measured on history.
-6. A generated rule catalogue: a "Rules" page in the Console and docs/rules-catalogue.md (plain language,
-   grouped by layer, with owner, source, status, and per-service suppressions).
-7. Migration plan for the existing 62 rules into the new layout with no behaviour change (prove it:
-   identical findings and status split on the 16 pending and 6,376 past changes).
-8. Governance: who approves rule and suppression changes (CODEOWNERS per folder), versioning, and
-   how a non-technical owner proposes a change.
-List decisions for me at the end.
+Decisions on docs/plans/rules-framework.md:
+- R1: in-house validator in crq rules validate (no new dependency); still commit the JSON Schema
+  file and document how to use it in VS Code for autocomplete.
+- R2: defer CHANGELENS_RULES_DIR; rules stay in the profile for now. Note it as an open item.
+- R3: suppressions max 6 months, renewable; check warns 30 days before expiry.
+- R4: approved_by = team or role + reference (ticket id or meeting minutes date); no personal names.
+- R5: locked rules must include CFG-03, Q-SAFETY-01, Q-COMPLETE-02, Q-COMPLETE-03, CC-05 and CC-02;
+  show me the final list.
+- R9: list the 8 switched-off rules with a recommendation each (retired or shadow); CC-07 -> shadow.
+- R6-R8, R10-R13: go with your recommendations; list each decision in one line.
+- Add the plan to docs/README.md.
+Then build Phase 1 (format + folder layout + migration, no behaviour change) only, prove identical
+results on all 6,376 past and 16 pending changes, run python scripts/check.py --browser, and stop.
+Service files, suppressions, shadow and the catalogue come in Phase 2. No branches, tags or commits.
