@@ -1,15 +1,7 @@
-Decision: identification is reliable only for mainframe. New design - measure first, then stop:
-1. Apply your 4 recommendations (service pattern alone -> Low; drop tier-2 "Database"; CI class alone
-   -> Medium; kubernetes -> Low). Mainframe from tier/reliable words runs the MF pack normally.
-2. Remove CL-02 as a scored finding.
-3. Propose a "general application" pack that runs on every change not identified as mainframe:
-   the most valuable MS/PCF/INF checks rewritten to be platform-neutral (release/version named,
-   deployment method stated, health checks and rollback trigger stated, hosts/CIs affected named),
-   each with severity, message, fix and pass/fail examples. Specific PCF/INF/DB packs run only on a
-   High signal; otherwise At a glance shows "Possible: <platform>".
-4. Treat configuration as a change type (detected by action phrases such as "update config",
-   "change property", "feature flag"), running the CFG rules when it applies.
-5. Measure on the 16 pending and 6,376 past changes: findings per rule and status split before/after;
-   and on the 29 marked rows, how many marked platforms' key checks are now covered.
-Write the proposal into work/platform-id/phase0-design.md. No code or profile changes; no branches,
-tags or commits.
+Decisions: E1 add database backup and backward-compatibility checks to the general pack, triggered
+only by the "apply/run DDL/DML/SQL script" phrase, capped at Major; do not promote AST:DataBase.
+E2 first release = Minor. E3 do not run configuration rules yet; show "Possible: configuration change".
+E4 GEN-04 passes when any CI is linked in Remedy. E5 widen the release trigger to the Details answers.
+Re-measure: status split (pending and past), findings per rule, coverage on the 29 marked rows; list 5
+CRQ ids per GEN rule that would now be flagged, for me to spot-check. Update section 11 of
+phase0-design.md. Then stop. No code or profile changes; no branches, tags or commits.
