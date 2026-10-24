@@ -1,19 +1,41 @@
-Build Phase 2 of docs/plans/rules-framework.md:
-1. Service files rules/services/<service>.yaml: add_rules (ids S-<SERVICE>-NN), suppress (rule, reason,
-   approved_by = team/role + reference, expires <= 6 months; warn 30 days before), parameters within the
-   bounds each rule declares. Locked rules cannot be suppressed or tuned; expired suppressions stop
-   applying; precedence global -> platform -> service.
-2. custom/ for organisation-wide custom rules (same format).
-3. Shadow rules run and show as "Advisory" with 0 points on the report, the brief and Send to owner;
-   crq rules measure <rule-id> runs a rule on past changes (codes and counts only).
-4. Reports: "N rules suppressed for this service" (names with Technical details on); Send to owner too.
-5. Generated docs/rules-catalogue.md and a read-only "Rules" page in the Console (plain language,
-   grouped by layer, with owner, source, status, locked, and per-service suppressions); the check fails
-   if the committed catalogue is out of date.
-6. Governance: CODEOWNERS per rules folder, an issue form for non-technical owners to propose a rule or
-   suppression, and docs/rules-authoring.md updated with worked examples (a custom rule, a service rule,
-   a suppression).
-7. Tests: suppression (valid, expired, locked refused), service rule, custom rule, parameter bounds,
-   shadow scores 0, catalogue up to date. With no service files present, results must stay identical
-   on all 6,392 reviews.
-Run python scripts/check.py --browser; codes and counts only; no branches, tags or commits; then stop.
+Add common change validation rules (from the team's Confluence validation pages, common items only).
+Phase 0 = design + measurement only; write docs/plans/common-validation-rules.md and stop.
+No profile, code, branch, tag or commit changes. Codes and counts only.
+
+Rules to add (global, apply to every change). Every new rule starts as status: shadow.
+Proposed severity in brackets; source = the Confluence validation pages.
+C1  Reason for Change is not blank. [Minor]
+C2  Urgency is 1 or 2, Impact is 1 or 2, or Priority is High/Critical -> "reduce unless intended";
+    one finding listing which of the three. [Minor]
+C3  Computed risk level above 3 -> "confirm the risk is calculated correctly". [Minor]
+C4  FreezeScope (In Scope of Restriction) is not blank; if "Yes", FreezeType is not blank AND a
+    justification is present in Work Details. [Major] Relate to CC-05 (no double counting).
+C5  Pre-Implementation testing is not blank. [Major]
+C6  If Pre-Implementation testing indicates no testing / manager approved, a Work Detail of type
+    "No Testing Attestation" is present. [Major]
+C7  Product Categorization Tier 2, Tier 3 and Product Name are not blank. [Minor]
+C8  Work Details contain entries of type: Backout Plan, Business Justification, Test Plan,
+    Technical Design, Risk Assessment (one finding listing the missing types). [Major]
+C9  Every task not Closed/Cancelled has a scheduled start and end time. [Major]
+C10 The first task's start equals the change's scheduled start and the last task's end equals the
+    change's scheduled end (ignore Closed/Cancelled tasks). [Minor]
+C11 At least one CI is linked with an "Impacts" relationship. [Minor]
+C12 Tighten the template impact-question rule: answers "N/A", "Not Applicable", "NA", "None" do not
+    count as answered.
+Not new rules: window > 24 h is covered by CC-06; approval cut-off by CC-01 and the approval-timing
+chip - confirm and note in the plan.
+
+Phase 0 deliverables:
+1. Field availability for every field used (Reason for Change, Urgency, Impact, Priority, Risk Level
+   computed, FreezeScope, FreezeType, Pre-Implementation testing, Product Cat Tier 2/3, Product Name,
+   Work Detail types, task status/start/end, CI relationship type): is it in the enterprise field map
+   and in the history? If not, mark TODO and list the check-fields step. Do not guess field names.
+   A rule whose field is unavailable is listed as "not checked", never failed.
+2. Actual values seen in history for Pre-Implementation testing, FreezeScope, FreezeType and Work
+   Detail types (counts only), so the wording in C4/C6/C8 matches real values.
+3. Overlap with existing rules (Q-COMPLETE-*, CC-05, CC-06, CC-01, template-question rules, GEN-*):
+   keep / replace / merge, with reasons.
+4. Shadow measurement on the 6,376 past and 16 pending changes: per rule how often it applies and
+   fires, and the status split if each were active.
+5. Rule ids, file placement in the framework, and wording (title, why, message, fix, question, examples).
+Then stop for my decisions.
