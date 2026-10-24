@@ -1,5 +1,3 @@
-   Make CV-02, CV-03, CV-05, CV-06 and CV-12 active. Keep CV-04, CV-09, CV-10, CV-08 and CV-11 in shadow.
-   Add FreezeScope, FreezeType, Change Freeze Justification, Risk Level - Computed and task Scheduled
-   Start/End Date to history_map.yaml (D14) and tell me the exact crq-load command to refresh history
-   with them - do not run the loader. Re-measure, update the catalogue and CHANGELOG, run
-   python scripts/check.py --browser; codes and counts only; no branches, tags or commits; then stop.
+If I split crq-load run into consecutive ranges (e.g. one quarter each), does each run add to the
+existing history or replace it? Give me the exact commands for a quarterly split that ends with the
+full 2025-10-20 to 2026-10-25 history. Do not run anything.
