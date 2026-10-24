@@ -1,14 +1,19 @@
-Decisions on docs/plans/rules-framework.md:
-- R1: in-house validator in crq rules validate (no new dependency); still commit the JSON Schema
-  file and document how to use it in VS Code for autocomplete.
-- R2: defer CHANGELENS_RULES_DIR; rules stay in the profile for now. Note it as an open item.
-- R3: suppressions max 6 months, renewable; check warns 30 days before expiry.
-- R4: approved_by = team or role + reference (ticket id or meeting minutes date); no personal names.
-- R5: locked rules must include CFG-03, Q-SAFETY-01, Q-COMPLETE-02, Q-COMPLETE-03, CC-05 and CC-02;
-  show me the final list.
-- R9: list the 8 switched-off rules with a recommendation each (retired or shadow); CC-07 -> shadow.
-- R6-R8, R10-R13: go with your recommendations; list each decision in one line.
-- Add the plan to docs/README.md.
-Then build Phase 1 (format + folder layout + migration, no behaviour change) only, prove identical
-results on all 6,376 past and 16 pending changes, run python scripts/check.py --browser, and stop.
-Service files, suppressions, shadow and the catalogue come in Phase 2. No branches, tags or commits.
+Build Phase 2 of docs/plans/rules-framework.md:
+1. Service files rules/services/<service>.yaml: add_rules (ids S-<SERVICE>-NN), suppress (rule, reason,
+   approved_by = team/role + reference, expires <= 6 months; warn 30 days before), parameters within the
+   bounds each rule declares. Locked rules cannot be suppressed or tuned; expired suppressions stop
+   applying; precedence global -> platform -> service.
+2. custom/ for organisation-wide custom rules (same format).
+3. Shadow rules run and show as "Advisory" with 0 points on the report, the brief and Send to owner;
+   crq rules measure <rule-id> runs a rule on past changes (codes and counts only).
+4. Reports: "N rules suppressed for this service" (names with Technical details on); Send to owner too.
+5. Generated docs/rules-catalogue.md and a read-only "Rules" page in the Console (plain language,
+   grouped by layer, with owner, source, status, locked, and per-service suppressions); the check fails
+   if the committed catalogue is out of date.
+6. Governance: CODEOWNERS per rules folder, an issue form for non-technical owners to propose a rule or
+   suppression, and docs/rules-authoring.md updated with worked examples (a custom rule, a service rule,
+   a suppression).
+7. Tests: suppression (valid, expired, locked refused), service rule, custom rule, parameter bounds,
+   shadow scores 0, catalogue up to date. With no service files present, results must stay identical
+   on all 6,392 reviews.
+Run python scripts/check.py --browser; codes and counts only; no branches, tags or commits; then stop.
