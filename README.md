@@ -1,12 +1,13 @@
-Decisions:
-1. Option A: make CL-02 Minor (not 0 points). Bump the rule pack version.
-2. Apply all 10 detect-word proposals as written (sub-type words only for reboot, patching,
-   control-m, batch job, config change, reorg, data fix; pcf not counted when only in the backout
-   plan; oracle requires "oracle database"/"oracle db"; tas requires "tanzu application service").
-   Keep changeman, jcl, postgres, stored procedure, buildpack, ddl.
-3. CI classes: add AST:DataBase -> database. For AST:ComputerSystem, measure only (how many changes it
-   would confirm as infrastructure and the status impact), do not add it yet.
-4. Then re-measure: status split, per-rule counts, and option B on top of the new words.
-List the classification.yaml and rule-pack diffs for the platform leads' review, record a new
-enterprise SHA-256 baseline, run python scripts/check.py --browser, and stop. Codes and counts
-only; no branches, tags or commits.
+Landing page (Review) wording - text and layout only, no behaviour change. No branches, tags or
+commits; never paste the Console URL with its ?t= token.
+- Subtitle: "Check the quality of any change, with context from similar past changes."
+- Remove the line under the CRQ box ("Reads Remedy with your own login. Nothing is changed.") and
+  its space.
+- Card 1 "Straight from Remedy": "Read live from Remedy, read-only. Every value shows where it came from."
+- Card 2 "Rules decide, history informs": "Scores come only from the agreed change-quality rules.
+  Past changes of the same service add context, never a verdict."
+- Card 3 "Ready in seconds": "A full quality report or a one-page executive brief, ready to print
+  or share."
+- Footer unchanged ("ChangeLens" + Technical details switch).
+Update the browser check and docs/user-guide.md if they quote this text. Run
+python scripts/check.py --browser; list files changed; then stop.
